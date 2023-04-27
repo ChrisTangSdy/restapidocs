@@ -1,4 +1,4 @@
-# RESTAPIDocs Examples
+# Maker-Chcker REST API Docs 
 
 These examples were taken from projects mainly using [Django Rest
 Framework](https://github.com/tomchristie/django-rest-framework) and so the
@@ -7,32 +7,18 @@ JSON responses are often similar to the way in which DRF makes responses.
 Where full URLs are provided in responses they will be rendered as if service
 is running on 'http://testserver/'.
 
-## Open Endpoints
 
-Open endpoints require no Authentication.
+### Detailed API document
 
-* [Login](login.md) : `POST /api/login/`
+* Go to the broswer enters `http://localhost:8080/maker-checker/swagger-ui/index.html`
 
-## Endpoints that require Authentication
 
-Closed endpoints require a valid Token to be included in the header of the
-request. A Token can be acquired from the Login view above.
+### Transaction related
 
-### Current User related
-
-Each endpoint manipulates or displays information related to the User whose
-Token is provided with the request:
-
-* [Show info](user/get.md) : `GET /api/user/`
-* [Update info](user/put.md) : `PUT /api/user/`
-
-### Account related
-
-Endpoints for viewing and manipulating the Accounts that the Authenticated User
+Endpoints for viewing and manipulating the Transactions that the Authenticated User
 has permissions to access.
 
-* [Show Accessible Accounts](accounts/get.md) : `GET /api/accounts/`
-* [Create Account](accounts/post.md) : `POST /api/accounts/`
-* [Show An Account](accounts/pk/get.md) : `GET /api/accounts/:pk/`
-* [Update An Account](accounts/pk/put.md) : `PUT /api/accounts/:pk/`
-* [Delete An Account](accounts/pk/delete.md) : `DELETE /api/accounts/:pk/`
+* [Show Accessible Accounts](accounts/get.md) : `POST /maker-checker/api/transactions`
+* [Create Account](accounts/post.md) : `PUT /maker-checker/api/transactions/{id}`
+* [Show An Account](accounts/pk/get.md) : `GET /maker-checker/api/transactions/{id}`
+* [Update An Account](accounts/pk/put.md) : `GET /maker-checker/api/transactions`

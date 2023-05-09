@@ -7,24 +7,23 @@ This document conatins API Definitions of the Maker-Checker system.
 
 ### Transaction related Endpoint
 
-Endpoints for viewing and manipulating the Transactions that the Authenticated User
+Endpoints for viewing and manipulating the Requests that the Authenticated User
 has permissions to access.
 
-* `POST /maker-checker/api/transactions` : Create a new transaction
-* `PUT /maker-checker/api/transactions/{id}` : Update the amount and description of a transaction, can't be used to update status and creator of this transaction
-* `GET /maker-checker/api/transactions/{id}` : Get a specific transaction by id
-* `GET /maker-checker/api/transactions` : Get transactions(Pagination), by default return the first 10 transactions, you can adjust the number of returns
-* `POST /maker-checker/transactions/{id}/approve` : Approve a transaction
-*  `POST /maker-checker/transactions/{id}/reject` : Reject a transaction
+* `POST /maker-checker/api/requests` : Create a new Request
+* `GET /maker-checker/api/requests/{id}` : Get a specific transaction by id
+* `GET /maker-checker/api/requests` : Get transactions(Pagination), by default return the first 10 requests, you can adjust the number of returns
+* `PUT /maker-checker/requests/{id}/approve` : Approve a request
+*  `PUT /maker-checker/requests/{id}/reject` : Reject a request
 
 
 # Detailed Explanation
 
-## 1.Create a new Transaction
+## 1.Create a new request
 
-create a new Transaction if current User has access permissions to it.
+create a new request if current User has access permissions to it.
 
-**URL** : `/maker-checker/api/transactions`
+**URL** : `/maker-checker/api/requests`
 
 **Method** : `POST`
 
@@ -38,10 +37,12 @@ User must have maker privilege (Haven't integrate with Token API yet)
 **Data from frontend**: 
 ```json
 {
-    "description":"Transfer to another bank",
-    "amount": 10030,
-    "createdBy": "Amber"
- }
+  "userId": 1,
+  "priority": "LOW",
+  "reviewsRequired": 5,
+  "description": "Account management",
+  "typeId": 1
+}
 ```
 
 ### Success Response
@@ -54,63 +55,18 @@ User must have maker privilege (Haven't integrate with Token API yet)
 
 ```json
 {
-        "id": 1,
-        "description": "Transfer internationally",
-        "amount": 4500.00,
-        "status": "PENDING",
-        "createdBy": "John",
-        "approvedBy": null
- }
-```
-
-
-## 2.Update a Transaction
-
-Update a Transaction if current User has access permissions to it.
-
-**URL** : `/maker-checker/api/transactions/{id}`
-
-**Method** : `PUT`
-
-**Auth required** : YES (Haven't integrate with Token API yet)
-
-**Permissions required** :
-
-User must have maker privilege (Haven't integrate with Token API yet)
-
-
-**Data  from frontend **: 
-```json
-{
-    "description":"Transfer to international account",
-    "amount": 10030.123,
- }
-```
-
-### Success Response
-
-**Condition** : If Account exists and Authorized User has required permissions.
-
-**Code** : `200 Ok`
-
-**Content example**
-
-```json
-{
-        
     "success": true,
-    "message": "Successfully updated a transaction"
-
- }
+    "message": "Successfully create a request"
+}
 ```
 
 
 
-## 3.Get many Transaction(pagination)
+## 2.Get many Requests(pagination)
 
-Update a Transaction if current User has access permissions to it.By default return the first 10 transactions, you can adjust the number of returns
+Get at least 10 requests if current User has access permissions to it.By default return the first 10 transactions, you can adjust the number of returns
 
-**URL** : `/maker-checker/api/transactions`
+**URL** : `/maker-checker/api/requests`
 
 **Method** : `GET`
 
@@ -120,7 +76,7 @@ Update a Transaction if current User has access permissions to it.By default ret
 
 * PageNo: default: 0
 * PageSize: default: 10
-* sortBy:   default "id"
+* sortBy:   default "requestId"
 
 
 **Permissions required** :
@@ -139,38 +95,48 @@ User must have maker privilege(Haven't integrate with Token API yet)
 ```json
 [
     {
-        "id": 1,
-        "description": "Transferring domestically",
-        "amount": 7000.00,
-        "status": "PENDING",
-        "createdBy": "John",
-        "approvedBy": null
+        "requestId": 1,
+        "userId": 1,
+        "priority": "LOW",
+        "createdAt": "2023-05-09T17:57:41.651012",
+        "reviewedAt": null,
+        "reviewsRequired": 5,
+        "reviewsReceived": 0,
+        "description": "Account management",
+        "requestStatus": "IN_PROGRESS",
+        "typeId": 1
     },
     {
-        "id": 2,
-        "description": "Transfer to another bank",
-        "amount": 10030.00,
-        "status": "PENDING",
-        "createdBy": "Amber",
-        "approvedBy": null
+        "requestId": 2,
+        "userId": 1,
+        "priority": "HIGH",
+        "createdAt": "2023-05-09T17:58:14.954211",
+        "reviewedAt": null,
+        "reviewsRequired": 2,
+        "reviewsReceived": 0,
+        "description": "International transaction",
+        "requestStatus": "IN_PROGRESS",
+        "typeId": 1
     }
 ]
 ```
 
 
-## 4. Approve a transaction
+## 4. Approve a request
 
-Approve Transaction if current User has access permissions to it.
+Approve a request if current User has access permissions to it.
 
-**URL** : `/maker-checker/api/transactions/{id}/approve`
+**URL** : `/maker-checker/api/requests/{id}/approve`
 
-**Method** : `Post`
+**Method** : `PUT`
 
 **Auth required** : YES
-**Data from frontend**: {
-"approvedBy": "shelly"
+**Data from frontend**: 
+{
+  "reviewerId": 2,
+  "comment": "the transaction looks legit"
+  
 }
-
 
 
 
@@ -190,25 +156,27 @@ User must have checker privilege(Haven't integrate with Token API yet)
 ```json
 {
     "success": true,
-    "message": "The transaction has been approved"
+    "message": "Your have reviewed a request"
 }
 ```
 
 
 
-## 5. Reject a transaction
+## 5. Reject a request
 
-Reject Transaction if current User has access permissions to it.
+Reject a request if current User has access permissions to it.
 
-**URL** : `/maker-checker/api/transactions/{id}/reject`
+**URL** : `/maker-checker/api/requests/{id}/reject`
 
-**Method** : `Post`
+**Method** : `PUT`
 
 **Auth required** : YES
 
-**Data from frontend**: {
-
-"approvedBy": "shelly"
+**Data from frontend**: 
+{
+  "reviewerId": 3,
+  "comment": "the transaction is dodge"
+  
 }
 
 
@@ -228,7 +196,7 @@ User must have checker privilege(Haven't integrate with Token API yet)
 ```json
 {
     "success": true,
-    "message": "The transaction has been rejected"
+    "message": "Your have reviewed a request"
 }
 ```
 

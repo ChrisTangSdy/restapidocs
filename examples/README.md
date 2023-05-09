@@ -3,16 +3,22 @@
 This document conatins API Definitions of the Maker-Checker system.
 
 
+### Swagger UI
+
+You can access and test api also through Swagger UI:
+Once starts the maker-checker backend, enter the following URL in the browser:
+* http://localhost:8080/maker-checker/swagger-ui/index.html 
 
 
-### Transaction related Endpoint
+
+### Request related Endpoint
 
 Endpoints for viewing and manipulating the Requests that the Authenticated User
 has permissions to access.
 
-* `POST /maker-checker/api/requests` : Create a new Request
-* `GET /maker-checker/api/requests/{id}` : Get a specific transaction by id
-* `GET /maker-checker/api/requests` : Get transactions(Pagination), by default return the first 10 requests, you can adjust the number of returns
+* `POST /maker-checker/api/requests` : Create a new request
+* `GET /maker-checker/api/requests/{id}` : Get a specific request by id
+* `GET /maker-checker/api/requests` : Get requests(Pagination), by default return the first 10 requests, you can adjust the number of returns
 * `PUT /maker-checker/requests/{id}/approve` : Approve a request
 *  `PUT /maker-checker/requests/{id}/reject` : Reject a request
 
